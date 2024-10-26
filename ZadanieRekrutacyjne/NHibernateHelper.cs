@@ -1,40 +1,44 @@
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
+using Microsoft.Extensions.Configuration;
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
 using ZadanieRekrutacyjne.Models;
+using NHibernateSession = NHibernate.ISession;
 
-namespace ZadanieRekrutacyjne;
-
-
-public class NHibernateHelper
+namespace ZadanieRekrutacyjne
+{
+    /// <summary>
+    /// Nhibernate helper class to open session with database
+    /// </summary>
+    public static class NHibernateHelper
     {
         private static ISessionFactory _sessionFactory;
+        private static IConfiguration _configuration;
 
-        public static NHibernate.ISession OpenSession()
+        public static void Initialize(IConfiguration configuration)
         {
-            return SessionFactory.OpenSession();
-        }
+            _configuration = configuration;
 
-        private static ISessionFactory SessionFactory
-        {
-            get
+            if (_sessionFactory == null)
             {
-                if (_sessionFactory == null)
-                {
-                    _sessionFactory = Fluently.Configure()
-                        .Database(
-                            MsSqlConfiguration.MsSql2012.ConnectionString(
-                                "Server=localhost\\TEW_SQLEXPRESS;Database=ZadanieRekrutacyjne;Integrated Security=SSPI;Application Name=ZadanieRekrutacyjne;TrustServerCertificate=true;")
-                        )  .Mappings(m =>
-                            m.FluentMappings.AddFromAssemblyOf<Tasks>())
-                       
-                        .ExposeConfiguration(cfg => new SchemaUpdate(cfg).Execute(false, true))
-                        .BuildSessionFactory();
-                }
-                return _sessionFactory;
+                var connectionString = _configuration.GetConnectionString("Default");
+
+                _sessionFactory = Fluently.Configure()
+                    .Database(
+                        MySQLConfiguration.Standard.ConnectionString(connectionString)
+                    )
+                    .Mappings(m =>
+                        m.FluentMappings.AddFromAssemblyOf<Tasks>()
+                    )
+                    .ExposeConfiguration(cfg => new SchemaUpdate(cfg).Execute(false, true))
+                    .BuildSessionFactory();
             }
         }
+
+        public static NHibernateSession OpenSession()
+        {
+            return _sessionFactory.OpenSession();
+        }
     }
-    
-    
+}

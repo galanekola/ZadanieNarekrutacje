@@ -1,15 +1,19 @@
 using System.Reflection;
 using FluentMigrator.Runner;
+using ZadanieRekrutacyjne;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Call NHibernateHelper.Initialize directly
+NHibernateHelper.Initialize(builder.Configuration);
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddFluentMigratorCore() // Move FluentMigrator registration here
+builder.Services.AddFluentMigratorCore() 
     .ConfigureRunner(c =>
     {
-        c.AddSqlServer2016()
-            .WithGlobalConnectionString("Server=localhost\\TEW_SQLEXPRESS;Database=ZadanieRekrutacyjne;Integrated Security=SSPI;Application Name=ZadanieRekrutacyjne; TrustServerCertificate=true;")
+        c.AddMySql5() // Use MySQL provider (compatible with MariaDB)
+            .WithGlobalConnectionString(builder.Configuration.GetConnectionString("Default"))
             .ScanIn(Assembly.GetExecutingAssembly()).For.All();
     })
     .AddLogging(config => config.AddFluentMigratorConsole());
@@ -20,9 +24,9 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
 using var scope = app.Services.CreateScope();
 var migrator = scope.ServiceProvider.GetService<IMigrationRunner>();
 
@@ -35,11 +39,10 @@ else
 {
     throw new Exception("Migration fault");
 }
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
 
 app.MapControllerRoute(

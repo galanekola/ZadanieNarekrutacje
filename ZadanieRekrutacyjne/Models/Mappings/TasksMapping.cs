@@ -2,7 +2,9 @@
 using FluentNHibernate.Mapping;
 
 namespace ZadanieRekrutacyjne.Models.Mapping;
-
+/// <summary>
+/// Class map for task using FluentNhibernate mapping
+/// </summary>
 public class TasksMapping : ClassMap<Tasks>
 {
     TasksMapping()

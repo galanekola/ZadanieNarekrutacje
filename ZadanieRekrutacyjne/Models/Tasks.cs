@@ -1,5 +1,7 @@
 namespace ZadanieRekrutacyjne.Models;
-
+/// <summary>
+/// Task class with all required fields
+/// </summary>
 public class Tasks
     {
         public virtual Guid Id { get; set; }
