@@ -1,13 +1,108 @@
 @model Tasks
 
 @{
-    ViewData["title"] = "Task " + Model.Title;
+ViewData["Title"] = "Task - " + Model.Title;
 }
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - Task Manager</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Animate.css for Animations -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet"/>
+    <style>
+        /* Custom Styles for Details Task View */
+        .details-task-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .details-task-container h4 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #333333;
+        }
+
+        /* Styling for Detail Items */
+        .detail-item {
+            margin-bottom: 15px;
+        }
+
+        .detail-item strong {
+            color: #555555;
+        }
+
+        /* Back Button Styling */
+        .btn-back {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        
+    </style>
+</head>
+<body>
 <div class="container">
-    <h4>Details for @Model.Title</h4>
-    <hr />
-    <p><strong>Details:</strong> @Model.Details</p>
-    <br />
-    <a asp-controller="Tasks" asp-action="Index" class="btn btn-primary">Back</a>
+    <div class="details-task-container animate__animated animate__fadeInUp">
+        <h4>Details for @Model.Title</h4>
+        <hr />
+        <div class="details-content">
+            <div class="detail-item">
+                <strong>ID:</strong> @Model.Id
+            </div>
+            <div class="detail-item">
+                <strong>Title:</strong> @Model.Title
+            </div>
+            <div class="detail-item">
+                <strong>Description:</strong> @Model.Description
+            </div>
+            <div class="detail-item">
+                <strong>Progress:</strong>
+                <div class="progress">
+                    <div class="progress-bar 
+                            @(Model.Progress < 50 ? "bg-danger" : (Model.Progress < 80 ? "bg-warning" : "bg-success"))
+                            " role="progressbar" style="width: @Model.Progress%;" aria-valuenow="@Model.Progress" aria-valuemin="0" aria-valuemax="100">
+                        @Model.Progress%
+                    </div>
+                </div>
+            </div>
+            <div class="detail-item">
+                <strong>Tag:</strong> <span class="badge bg-primary">@Model.Tag</span>
+            </div>
+            <div class="detail-item">
+                <strong>Deadline:</strong> @Model.Deadline.ToString("MMMM dd, yyyy h:mm tt")
+            </div>
+            <div class="detail-item">
+                <strong>Created On:</strong> @Model.CreateTime.ToString("MMMM dd, yyyy")
+            </div>
+            <div class="detail-item">
+                <strong>Details:</strong>
+                <p>@Model.Details</p>
+            </div>
+        </div>
+        <a asp-controller="Tasks" asp-action="Index" class="btn btn-primary btn-back">Back to Task List</a>
+    </div>
 </div>
+
+<!-- Bootstrap JS and Dependencies -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJvDQ4VWWKQ3YH8cltwqSt8n31irMdcLvu7Og="
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Optional: Additional JavaScript for enhanced interactivity -->
+<script>
+    // Example: Highlight the current page in navigation (if applicable)
+    $(document).ready(function () {
+        // Add any JavaScript enhancements here
+    });
+</script>
+</body>
+</html>

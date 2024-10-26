@@ -1,5 +1,6 @@
 namespace ZadanieRekrutacyjne.Models.Migrations;
 using FluentMigrator;
+
 [Migration(001)]
 public class CreateTableTasks : Migration
 {
@@ -8,13 +9,14 @@ public class CreateTableTasks : Migration
         Create.Table("Tasks")
             .WithColumn("Id").AsGuid().PrimaryKey().NotNullable()
             .WithColumn("Title").AsString().NotNullable()
-            .WithColumn("Description").AsString().Nullable()
+            .WithColumn("Description").AsString(int.MaxValue).Nullable()
             .WithColumn("Progress").AsInt32().Nullable()
             .WithColumn("Tag").AsString().Nullable()
             .WithColumn("Deadline").AsDateTime2().Nullable()
             .WithColumn("CreateTime").AsDateTime2().Nullable()
-            .WithColumn("Details").AsString().Nullable();
+            .WithColumn("Details").AsString(int.MaxValue).Nullable(); 
     }
+
     public override void Down()
     {
         Delete.ForeignKey("FK_Tasks_Tabela").OnTable("Tasks");

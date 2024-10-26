@@ -1,40 +1,122 @@
-
 @model Tasks
 
 @{
-    ViewData["title"] = "Edit Task " + Model.Title;
+ViewData["Title"] = "Edit Task - " + Model.Title;
 }
 
-<div class="container">
-    <h4>Edit Task</h4>
-    <hr />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - Task Manager</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Animate.css for Animations -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet"/>
+    <style>
+        /* Custom Styles for Edit Task Form */
+        .edit-task-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
 
-    <form method="post" asp-action="Edit" enctype="multipart/form-data">
-        <div class="mb-3">
-            <label asp-for="Title">Title:</label>
-            <input asp-for="Title" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label asp-for="Description">Description:</label>
-            <input asp-for="Description" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label asp-for="Progress">Progress:</label>
-            <input asp-for="Progress" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label asp-for="Tag">Tag:</label>
-            <input asp-for="Tag" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label asp-for="Deadline">Deadline:</label>
-            <input asp-for="Deadline" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label asp-for="Details">Details:</label>
-            <input asp-for="Details" class="form-control" />
-        </div>
-        <button type="submit" class="btn btn-success">Save changes</button>
-        <a asp-controller="Tasks" asp-action="Index" class="btn btn-primary">Back</a>
-    </form>
+        .edit-task-container h4 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #333333;
+        }
+
+        .edit-task-container form {
+            /* Utilize Animate.css for animations instead of custom keyframes */
+        }
+
+        .edit-task-container .btn-submit {
+            width: 100%;
+        }
+
+        .edit-task-container .btn-back {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        /* Input Focus Effect */
+        .form-control:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+        
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="edit-task-container animate__animated animate__fadeInUp">
+        <h4>Edit Task</h4>
+        <hr />
+
+        <form method="post" asp-action="Edit" enctype="multipart/form-data" novalidate>
+            <!-- Hidden Field for Task ID (if necessary) -->
+            <input type="hidden" asp-for="Id" />
+
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label">Title</label>
+                <input asp-for="Title" class="form-control" placeholder="Enter task title" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label">Description</label>
+                <textarea asp-for="Description" class="form-control" rows="3" placeholder="Enter task description"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Progress" class="form-label">Progress (%)</label>
+                <input asp-for="Progress" class="form-control" type="number" min="0" max="100" placeholder="Enter progress percentage" />
+                <span asp-validation-for="Progress" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Tag" class="form-label">Tag</label>
+                <input asp-for="Tag" class="form-control" placeholder="Enter task tag" />
+                <span asp-validation-for="Tag" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Deadline" class="form-label">Deadline</label>
+                <input asp-for="Deadline" class="form-control" type="date" />
+                <span asp-validation-for="Deadline" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Details" class="form-label">Details</label>
+                <textarea asp-for="Details" class="form-control" rows="4" placeholder="Enter additional details"></textarea>
+                <span asp-validation-for="Details" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-success btn-submit">Save Changes</button>
+            <a asp-controller="Tasks" asp-action="Index" class="btn btn-primary btn-back">Back to Task List</a>
+        </form>
+    </div>
 </div>
+
+<!-- Bootstrap JS and Dependencies -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJvDQ4VWWKQ3YH8cltwqSt8n31irMdcLvu7Og="
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- jQuery Validation and Unobtrusive Validation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    // Optional: Additional JavaScript for enhanced interactivity
+
+    // Function to enhance form validation feedback
+    $(document).ready(function () {
+        $('form').on('submit', function (e) {
+            if (!$(this).valid()) {
+                e.preventDefault();
+            }
+        });
+    });
+</script>
+</body>
+</html>
