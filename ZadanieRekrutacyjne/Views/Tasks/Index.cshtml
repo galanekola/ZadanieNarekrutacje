@@ -1,0 +1,46 @@
+@model IEnumerable<Tasks>
+
+<div class="container">
+    <a asp-controller="Tasks" asp-action="Create" class="btn btn-primary" style="float: right;">Add Task</a>
+    <br />
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Title</th>
+            <th scope="col">Description</th>
+            <th scope="col">Progress</th>
+            <th scope="col">Tag</th>
+            <th scope="col">Deadline</th>
+            <th scope="col">CreateTime</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var obj in Model)
+        {
+        <tr>
+            <td><strong>@obj.Id</strong></td>
+            <td><strong>@obj.Title</strong></td>
+            <td><strong>@obj.Description</strong></td>
+            <td><strong>@obj.Progress</strong></td>
+            <td><strong>@obj.Tag</strong></td>
+            <td><strong>@obj.Deadline</strong></td>
+            <td><strong>@obj.CreateTime</strong></td>
+            
+            <td>
+                <a asp-controller="Tasks" asp-action="Details" asp-route-id="@obj.Id" class="btn btn-primary">Details</a>
+                <a asp-controller="Tasks" asp-action="Edit" asp-route-id="@obj.Id" class="btn btn-warning">Edit</a>
+                <form asp-action="Delete" method="post" style="display:inline;">
+                    <input type="hidden" name="id" value="@obj.Id" />
+                    <button type="button" class="btn btn-danger"
+                            onclick="if(confirm('Are you sure that you want to delete this task?')) { this.closest('form').submit(); }">
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+        }
+        </tbody>
+    </table>
+</div>

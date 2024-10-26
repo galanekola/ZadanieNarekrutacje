@@ -1,0 +1,13 @@
+@model Tasks
+
+@{
+    ViewData["title"] = "Task " + Model.Title;
+}
+
+<div class="container">
+    <h4>Details for @Model.Title</h4>
+    <hr />
+    <p><strong>Details:</strong> @Model.Details</p>
+    <br />
+    <a asp-controller="Tasks" asp-action="Index" class="btn btn-primary">Back</a>
+</div>
